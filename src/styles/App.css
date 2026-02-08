@@ -65,22 +65,22 @@ body {
 
 .splash-sponsors {
   position: absolute;
-  top: 60px;
+  top: 30px;
   width: 100%;
   display: flex;
   justify-content: center;
 }
 
 .splash-sponsors img {
-  max-width: 90%;
+  max-width: 75%;
   height: auto;
 }
 
 .splash-logo {
-  max-width: 400px;
-  width: 85%;
+  max-width: 320px;
+  width: 70%;
   height: auto;
-  margin-top: -80px;
+  margin-top: -300px;
   animation: scaleIn 0.8s ease-out;
 }
 
