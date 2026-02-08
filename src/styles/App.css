@@ -4,11 +4,21 @@
   box-sizing: border-box;
 }
 
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  background: linear-gradient(180deg, #2d1f47 0%, #4a3268 100%);
+  position: fixed;
+  overscroll-behavior: none;
+}
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
 }
 
 .app {
@@ -17,15 +27,23 @@ body {
   display: flex;
   justify-content: center;
   align-items: flex-start;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 }
 
 .app-container {
   width: 100%;
   max-width: 480px;
   min-height: 100vh;
+  max-height: 100vh;
   background: linear-gradient(180deg, #2d1f47 0%, #4a3268 100%);
   box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
   position: relative;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* ========== SPLASH SCREEN ========== */
@@ -47,7 +65,7 @@ body {
 
 .splash-sponsors {
   position: absolute;
-  top: 120px;
+  top: 60px;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -62,13 +80,13 @@ body {
   max-width: 400px;
   width: 85%;
   height: auto;
-  margin-bottom: 40px;
+  margin-top: -80px;
   animation: scaleIn 0.8s ease-out;
 }
 
 .splash-footer {
   position: absolute;
-  bottom: 60px;
+  bottom: 30px;
   color: white;
   font-size: 18px;
   font-weight: 500;
@@ -197,7 +215,7 @@ body {
   border-radius: 50%;
   width: 40px;
   height: 40px;
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   cursor: pointer;
@@ -364,6 +382,7 @@ body {
 .prayer-icon img {
   width: 50px;
   height: 50px;
+  object-fit: contain;
 }
 
 .prayer-name {
