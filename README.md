@@ -165,4 +165,3 @@ Za pitanja i pomoć, kontaktirajte autora.
 ---
 
 **Ramadan Kareem! 🌙**
-# ramadan-app
