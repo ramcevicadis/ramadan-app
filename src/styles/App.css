@@ -80,7 +80,7 @@ body {
   max-width: 320px;
   width: 70%;
   height: auto;
-  margin-top: -100px;
+  margin-top: -200px;
   animation: scaleIn 0.8s ease-out;
 }
 
