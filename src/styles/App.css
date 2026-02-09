@@ -66,7 +66,7 @@ body {
 .splash-sponsors {
   position: absolute;
   top: 60px;
-  width: 100%;
+  width: 80%;
   display: flex;
   justify-content: center;
 }
