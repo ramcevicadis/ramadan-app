@@ -71,7 +71,13 @@ body {
   object-fit: contain; /* Prikazuje CELU sliku bez odsecanja */
   object-position: center;
 }
-
+.splash-sponsors {
+  position: absolute;
+  top: 60px;  /* ← PROMENI sa 30px na 60px ili 80px */
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
 /* Home Screen */
 .home-screen {
   width: 100%;
