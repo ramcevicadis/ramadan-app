@@ -191,7 +191,6 @@ const HomeScreen = () => {
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
     >
-     <div className="sticky-header"> 
       {/* Header */}
       <div className="home-header">
         <div className="city-selector">
@@ -257,7 +256,6 @@ const HomeScreen = () => {
           ▶
         </button>
       </div>
-       </div>
 
       {/* Special Day Banner */}
       {specialDay && (
