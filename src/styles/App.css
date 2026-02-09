@@ -519,3 +519,47 @@ body {
   from { transform: translateX(-100%); opacity: 0; }
   to { transform: translateX(0); opacity: 1; }
 }
+/* ========== FIX ZA BELI PROSTOR ========== */
+
+/* Osiguraj da nema belog prostora */
+html {
+  height: 100vh;
+  height: -webkit-fill-available;
+  background: #2d1f47;
+}
+
+body {
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+  background: #2d1f47;
+}
+
+/* App container fix */
+.app {
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+  background: linear-gradient(180deg, #2d1f47 0%, #4a3268 100%);
+}
+
+.app-container {
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+  padding-bottom: 0;
+  background: linear-gradient(180deg, #2d1f47 0%, #4a3268 100%);
+}
+
+/* Home screen fix */
+.home-screen {
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+  padding-bottom: 90px; /* Prostor za navigation */
+  background: linear-gradient(180deg, #2d1f47 0%, #4a3268 100%);
+}
+
+/* Tabbar/Navigation fix - PROVERI IME KLASE */
+.tabbar,
+.bottom-nav,
+.navigation {
+  background: linear-gradient(180deg, #2d1f47 0%, #4a3268 100%);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
