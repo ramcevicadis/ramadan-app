@@ -216,6 +216,7 @@ body {
   justify-content: space-between;
   padding: 20px;
   color: white;
+  background: linear-gradient(180deg, #2d1f47 0%, #4a3268 100%);
 }
 
 .nav-arrow {
