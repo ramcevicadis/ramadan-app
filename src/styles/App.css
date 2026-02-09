@@ -65,22 +65,22 @@ body {
 
 .splash-sponsors {
   position: absolute;
-  top: 30px;
+  top: 60px;
   width: 100%;
   display: flex;
   justify-content: center;
 }
 
 .splash-sponsors img {
-  max-width: 75%;
+  max-width: 90%;
   height: auto;
 }
 
 .splash-logo {
-  max-width: 320px;
-  width: 70%;
+  max-width: 400px;
+  width: 85%;
   height: auto;
-  margin-top: -300px;
+  margin-top: -80px;
   animation: scaleIn 0.8s ease-out;
 }
 
@@ -88,7 +88,7 @@ body {
   position: absolute;
   bottom: 30px;
   color: white;
-  font-size: 12px;
+  font-size: 18px;
   font-weight: 500;
   text-align: center;
   padding: 0 20px;
@@ -178,8 +178,7 @@ body {
   background-size: cover;
   background-position: center;
   border-radius: 20px;
-  padding: 50px 20px;
-  min-height: 280px;
+  padding: 30px 20px;
   text-align: center;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
   position: relative;
