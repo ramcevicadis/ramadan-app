@@ -48,25 +48,22 @@ body {
 
 
 /* ========== SPLASH SCREEN ========== */
-splash-screen {
+.splash-screen {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-size: cover;
-  background-position: center;
+  height: 100dvh;
+  min-height: -webkit-fill-available;
+  /* Slika se učitava kroz React komponentu, ne kroz CSS */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
-  animation: fadeIn 0.5s ease-in-out;
-}
-.splash-sponsors {
-  position: absolute;
-  top: 30px;
-  /* ... ostalo ... */
+  z-index: 9999;
+  margin: 0;
+  padding: 0;
 }
 
 /* Home Screen */
