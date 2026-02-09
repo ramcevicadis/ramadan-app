@@ -65,6 +65,12 @@ body {
   margin: 0;
   padding: 0;
 }
+.splash-screen img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* Prikazuje CELU sliku bez odsecanja */
+  object-position: center;
+}
 
 /* Home Screen */
 .home-screen {
