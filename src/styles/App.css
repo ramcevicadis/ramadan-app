@@ -45,14 +45,7 @@ body {
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
 }
-/* ========== STICKY HEADER ========== */
-.sticky-header {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: linear-gradient(180deg, #2d1f47 0%, #4a3268 100%);
-  padding-bottom: 10px;
-}
+
 /* ========== SPLASH SCREEN ========== */
 .splash-screen {
   position: fixed;
@@ -95,7 +88,7 @@ body {
   position: absolute;
   bottom: 30px;
   color: white;
-  font-size: 12px;
+  font-size: 18px;
   font-weight: 500;
   text-align: center;
   padding: 0 20px;
@@ -129,7 +122,6 @@ body {
   align-items: center;
   padding: 50px 20px 20px;
   position: relative;
-  background: linear-gradient(180deg, #2d1f47 0%, #4a3268 100%);
 }
 
 .city-selector {
@@ -187,13 +179,12 @@ body {
   background-position: center;
   border-radius: 20px;
   padding: 30px 20px;
-  min-height: 350px;
   text-align: center;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
   position: relative;
   overflow: hidden;
-  background: linear-gradient(180deg, rgba(45, 31, 71, 0.3) 0%, rgba(74, 50, 104, 0.3) 100%);
 }
+
 .countdown-timer {
   font-size: 56px;
   font-weight: bold;
@@ -216,7 +207,6 @@ body {
   justify-content: space-between;
   padding: 20px;
   color: white;
-  background: linear-gradient(180deg, #2d1f47 0%, #4a3268 100%);
 }
 
 .nav-arrow {
@@ -553,12 +543,4 @@ body {
 @keyframes slideRight {
   from { transform: translateX(-100%); opacity: 0; }
   to { transform: translateX(0); opacity: 1; }
-}
-/* ========== STICKY HEADER ========== */
-.sticky-header {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: linear-gradient(180deg, #2d1f47 0%, #4a3268 100%);
-  padding-bottom: 10px;
 }
