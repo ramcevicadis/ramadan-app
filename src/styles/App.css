@@ -73,8 +73,8 @@ body {
 }
 .splash-sponsors {
   position: absolute;
-  top: 60px;  /* ← PROMENI sa 30px na 60px ili 80px */
-  width: 100%;
+  top: 80px;  /* ← PROMENI sa 30px na 60px ili 80px */
+  width: 80%;
   display: flex;
   justify-content: center;
 }
