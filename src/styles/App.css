@@ -129,6 +129,7 @@ body {
   align-items: center;
   padding: 50px 20px 20px;
   position: relative;
+  background: linear-gradient(180deg, #2d1f47 0%, #4a3268 100%);
 }
 
 .city-selector {
