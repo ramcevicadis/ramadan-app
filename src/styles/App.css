@@ -56,10 +56,7 @@ body {
   height: 100vh;
   height: 100dvh;
   min-height: -webkit-fill-available;
-  background-image: url('./splash-background.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  /* Slika se učitava kroz React komponentu, ne kroz CSS */
   display: flex;
   flex-direction: column;
   align-items: center;
