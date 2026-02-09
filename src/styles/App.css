@@ -186,14 +186,14 @@ body {
   background-size: cover;
   background-position: center;
   border-radius: 20px;
-  padding: 50px 20px;
-  min-height: 300px;
+  padding: 30px 20px;
+  min-height: 350px;
   text-align: center;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
   position: relative;
   overflow: hidden;
+  background: linear-gradient(180deg, rgba(45, 31, 71, 0.3) 0%, rgba(74, 50, 104, 0.3) 100%);
 }
-
 .countdown-timer {
   font-size: 56px;
   font-weight: bold;
