@@ -72,6 +72,7 @@ body {
   object-position: center;
 }
 .splash-sponsors {
+  .splash-sponsors {
   position: absolute;
   top: 60px;  /* ← PROMENI sa 30px na 60px ili 80px */
   width: 100%;
