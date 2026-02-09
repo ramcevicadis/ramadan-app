@@ -47,12 +47,15 @@ body {
 }
 
 /* ========== SPLASH SCREEN ========== */
+/* ========== SPLASH SCREEN ========== */
 .splash-screen {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
+  height: 100dvh;
+  min-height: -webkit-fill-available;
   background-image: url('./splash-background.jpg');
   background-size: cover;
   background-position: center;
@@ -64,13 +67,12 @@ body {
   z-index: 9999;
   margin: 0;
   padding: 0;
-  
-  /* OVO JE KLJUČNO - pokriva status bar */
-  height: 100dvh; /* Dynamic viewport height */
-  min-height: 100vh;
-  min-height: -webkit-fill-available;
 }
-}
+
+.splash-sponsors {
+  position: absolute;
+  top: 30px;
+  /* ... ostalo ... */
 
 /* Home Screen */
 .home-screen {
