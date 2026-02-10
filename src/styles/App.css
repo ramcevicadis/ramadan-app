@@ -78,7 +78,7 @@ body {
 
 .splash-logo {
   max-width: 320px;
-  width: 85%;
+  width: 65%;
   height: auto;
   margin-top: -250px;
   animation: scaleIn 0.8s ease-out;
