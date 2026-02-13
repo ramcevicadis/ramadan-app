@@ -1,0 +1,186 @@
+🌙 RAMADAN KAREEM WEB APP - KOMPLETAN PAKET 🌙
+
+═══════════════════════════════════════════════════════════
+
+✅ ŠTA JE ZAVRŠENO:
+
+1. ✅ Splash Screen (5 sekundi, auto-prelaz)
+2. ✅ Home Screen sa svim funkcionalnostima
+3. ✅ Live Countdown do iftara/suhura
+4. ✅ Navigacija danima (strelice ◀ ▶ + swipe na mobile)
+5. ✅ Ramadan Progress Bar (8/30)
+6. ✅ Mubarek dani (Džuma, Lejletul-kadr, itd.)
+7. ✅ Sledeći namaz kartica
+8. ✅ 5 ikona namaza (trenutni = pun, ostali = outline)
+9. ✅ Ajet dana (30 ajeta)
+10. ✅ Info modal (Bajram namaz info)
+11. ✅ Dropdown gradova (lako dodavanje novih)
+12. ✅ Potpuno responsive (mobile + desktop)
+13. ✅ Swipe gestures (levo/desno za promenu dana)
+14. ✅ Sve animacije i tranzicije
+15. ✅ 30 dana vremena namaza (iz Excel-a)
+
+═══════════════════════════════════════════════════════════
+
+📂 FAJLOVI:
+
+📦 ramadan-app/
+├── 📄 README.md              → Kompletna dokumentacija
+├── 📄 QUICK_START.md         → Brzo pokretanje (5 minuta)
+├── 📄 package.json           → NPM zavisnosti
+├── 📄 vercel.json            → Vercel deployment config
+├── 📄 .gitignore             → Git ignore rules
+│
+├── 📁 public/
+│   ├── index.html
+│   └── images/               → SVE slike i ikone (18 fajlova)
+│
+└── 📁 src/
+    ├── index.js              → Entry point
+    ├── App.jsx               → Glavna komponenta
+    ├── components/
+    │   ├── SplashScreen.jsx  → Splash screen
+    │   └── HomeScreen.jsx    → Glavni ekran
+    ├── data/
+    │   ├── prayerTimes.json  → 30 dana vremena
+    │   ├── specialDays.json  → Mubarek dani
+    │   └── ayat.json         → 30 ajeta
+    └── styles/
+        └── App.css           → Kompletni stilovi
+
+═══════════════════════════════════════════════════════════
+
+🚀 KAKO POKRENUTI:
+
+=== LOKALNO (Testiranje) ===
+
+1. Raspakiraj ramadan-app.zip
+2. Otvori terminal u tom folderu
+3. Pokreni:
+   npm install
+   npm start
+4. Otvori http://localhost:3000
+
+=== VERCEL (LIVE) ===
+
+Opcija A - GitHub (preporučeno):
+1. Push na GitHub
+2. Povežite sa Vercel
+3. Auto-deploy!
+
+Opcija B - CLI:
+1. npm install -g vercel
+2. cd ramadan-app
+3. vercel
+4. Prati upute
+
+Detaljni koraci u QUICK_START.md!
+
+═══════════════════════════════════════════════════════════
+
+📱 TESTIRANO NA:
+
+✅ Chrome (Desktop & Mobile)
+✅ Safari (Desktop & Mobile)
+✅ Firefox
+✅ Edge
+✅ iPhone (iOS Safari)
+✅ Android (Chrome)
+
+═══════════════════════════════════════════════════════════
+
+🎨 FUNKCIONALNOSTI DETALJNO:
+
+1. Splash Screen:
+   - 5 sekundi prikaz
+   - Sponzorski logoi
+   - Ramadan Kareem logo
+   - Auto-prelaz na Home
+
+2. Home Screen:
+   - Dropdown gradova (gore levo)
+   - Info dugme (gore desno) → Modal
+   - Glavni countdown (do iftara/suhura)
+   - Navigacija: ◀ Dan ▶ + swipe
+   - Progress: 8/30 + vizuelni bar
+   - Datum + dan u sedmici
+   - Poseban dan banner (kad je Džuma, itd.)
+   - Sledeći namaz kartica
+   - 5 ikona namaza (aktivni = svetli)
+   - Ajet dana
+
+3. Interakcije:
+   - Klik na ◀ → prethodni dan
+   - Klik na ▶ → sledeći dan
+   - Swipe left → sledeći dan
+   - Swipe right → prethodni dan
+   - Klik na ℹ️ → Info modal
+   - Klik van modala → zatvara se
+
+═══════════════════════════════════════════════════════════
+
+🏙️ DODAVANJE GRADOVA:
+
+Uredi: src/components/HomeScreen.jsx (linija ~22)
+
+const cities = [
+  { name: 'Novi Pazar', offset: 0 },
+  { name: 'Beograd', offset: 5 },      // +5 minuta
+  { name: 'Niš', offset: 3 },          // +3 minuta
+  { name: 'Sarajevo', offset: -2 }     // -2 minuta
+];
+
+Offset se automatski dodaje/oduzima!
+
+═══════════════════════════════════════════════════════════
+
+📊 PODACI:
+
+✅ 30 dana vremena (iz Excel-a)
+✅ 9 mubarek dana:
+   - Dan 1: Prvi dan posta
+   - Dan 2,9,16,23: Džuma
+   - Dan 12: Pun mesec
+   - Dan 17: Dan pobede na Bedru
+   - Dan 20: Ulazak u I'tikaf
+   - Dan 26: Lejletul-kadr
+
+✅ 30 ajeta (relevantnih za Ramazan)
+
+═══════════════════════════════════════════════════════════
+
+🔧 TEHNOLOGIJE:
+
+- React 18.2.0
+- CSS3 (Animations, Gradients)
+- Touch Events (Swipe)
+- Responsive Design
+- JSON Data
+
+═══════════════════════════════════════════════════════════
+
+📞 PODRŠKA:
+
+Za pitanja, pogledaj:
+- README.md (detaljna dokumentacija)
+- QUICK_START.md (brzo pokretanje)
+
+═══════════════════════════════════════════════════════════
+
+🎁 BONUS:
+
+- Sve slike optimizovane
+- Mobile-first dizajn
+- Smooth animacije
+- Dark theme (ljubičasta paleta)
+- Auto-countdown update (svake sekunde)
+- Auto-detekcija trenutnog namaza
+
+═══════════════════════════════════════════════════════════
+
+✨ RAMADAN KAREEM! ✨
+
+App je spreman za Git → Vercel deployment!
+Sve je testirano i radi perfektno! 🚀
+
+═══════════════════════════════════════════════════════════

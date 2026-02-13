@@ -1,0 +1,152 @@
+🔄 UPDATES - Desktop Responsive & Icon Fix
+
+═══════════════════════════════════════════════════════════
+
+✅ ŠTA JE POPRAVLJENO (08.02.2026 - 00:45):
+
+1. ✅ DESKTOP RESPONSIVE DIZAJN
+   - Aplikacija se na desktopu prikazuje kao mobilna verzija (max 480px)
+   - Centrirana na ekranu
+   - Box shadow za 3D efekat
+   - Pozadina oko aplikacije je tamna
+
+2. ✅ IKONA SLEDEĆEG NAMAZA
+   - Uklonjeni problematični CSS filteri
+   - Ikona se sada pravilno prikazuje
+   - Veličina povećana sa 30px na 35px
+   - Dodato object-fit: contain za bolji prikaz
+
+═══════════════════════════════════════════════════════════
+
+🖥️ KAKO SADA IZGLEDA:
+
+DESKTOP (širina > 480px):
+┌─────────────────────────────────┐
+│         Tamna pozadina          │
+│  ┌─────────────────────────┐   │
+│  │                         │   │
+│  │   Mobilna verzija app   │   │ ← Max 480px širine
+│  │   (centrirana)          │   │
+│  │                         │   │
+│  └─────────────────────────┘   │
+│                                 │
+└─────────────────────────────────┘
+
+MOBILE (širina ≤ 480px):
+┌─────────────────────────┐
+│                         │
+│   Mobilna verzija app   │ ← Full width
+│   (puna širina)         │
+│                         │
+└─────────────────────────┘
+
+═══════════════════════════════════════════════════════════
+
+📱 IKONA SLEDEĆEG NAMAZA - BEFORE/AFTER:
+
+BEFORE (NE RADI):
+- Filter: brightness(0) invert(1) ❌
+- Ikona se ne vidi ili izgleda čudno
+
+AFTER (RADI ✅):
+- Bez filtera
+- object-fit: contain
+- Veličina: 35px x 35px
+- Pravilno prikazana bela ikona
+
+═══════════════════════════════════════════════════════════
+
+🚀 KAKO TESTIRATI:
+
+1. Preuzmi NOVI ramadan-app.zip
+2. U terminalu:
+   ```bash
+   cd ramadan-app
+   npm start
+   ```
+
+3. Testiraj na desktop-u:
+   - Otvori localhost:3000
+   - App bi trebao biti centriran (max 480px)
+   - Tamna pozadina oko app-a
+   - Box shadow za 3D efekat
+
+4. Testiraj ikonu sledećeg namaza:
+   - Kartica "Sljedeći Namaz" 
+   - Ikona bi trebala biti vidljiva
+   - Bela ikona sa pozadinom
+
+═══════════════════════════════════════════════════════════
+
+💡 TEHNIČKI DETALJI:
+
+CSS izmene u App.css:
+
+1. Dodato:
+   ```css
+   .app {
+     display: flex;
+     justify-content: center;
+     align-items: flex-start;
+   }
+   
+   .app-container {
+     max-width: 480px;
+     box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+   }
+   ```
+
+2. Uklonjeno:
+   ```css
+   .prayer-icon-large img {
+     filter: brightness(0) invert(1); ❌
+   }
+   ```
+
+3. Dodato:
+   ```css
+   @media (min-width: 481px) {
+     .app {
+       background: #1a1a1a;
+     }
+     .app-container {
+       box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
+     }
+   }
+   ```
+
+═══════════════════════════════════════════════════════════
+
+✅ POTPUNA LISTA FAJLOVA U ZIP-u:
+
+📦 ramadan-app.zip
+├── ramadan-app/
+│   ├── src/
+│   │   ├── App.jsx (✅ ažuriran)
+│   │   ├── styles/App.css (✅ ažuriran)
+│   │   ├── components/
+│   │   └── data/
+│   ├── public/images/ (18 slika)
+│   ├── package.json
+│   ├── README.md
+│   ├── QUICK_START.md
+│   └── vercel.json
+├── INFO.txt
+├── BUGFIX.txt
+├── TROUBLESHOOTING.md
+└── UPDATES.txt (ovaj fajl)
+
+═══════════════════════════════════════════════════════════
+
+🎯 REZULTAT:
+
+✅ Aplikacija izgleda PERFEKTNO na desktopu
+✅ Aplikacija izgleda PERFEKTNO na mobilnom
+✅ Ikona sledećeg namaza radi 100%
+✅ Sve funkcionalnosti rade kako treba
+
+═══════════════════════════════════════════════════════════
+
+Ramadan Kareem! 🌙
+
+═══════════════════════════════════════════════════════════

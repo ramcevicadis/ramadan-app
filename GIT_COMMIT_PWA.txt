@@ -1,0 +1,43 @@
+═══════════════════════════════════════════════════════════
+GIT COMMIT MESSAGE - Copy/Paste
+═══════════════════════════════════════════════════════════
+
+Add PWA support with manifest, service worker, and icons
+
+- Added manifest.json for Progressive Web App configuration
+- Added service-worker.js for offline functionality and caching
+- Registered service worker in src/index.js
+- Updated index.html with PWA meta tags and iOS support
+- Generated app icons (192x192, 512x512, 180x180, favicon)
+- App can now be installed on Android, iOS, and desktop
+- Supports offline mode with automatic caching
+- Auto-install prompt on Android Chrome
+- Manual install available on iOS Safari
+
+Features:
+- Standalone display mode (fullscreen without browser UI)
+- Purple theme color matching app design
+- Portrait orientation lock
+- Optimized icons for all devices
+- Cache-first strategy for fast loading
+
+═══════════════════════════════════════════════════════════
+KAKO COMMIT-OVATI:
+═══════════════════════════════════════════════════════════
+
+cd /Users/adisramcevic/Downloads/vaktija/ramadan-app
+
+git add .
+
+git commit -m "Add PWA support with manifest, service worker, and icons
+
+- Added manifest.json for Progressive Web App configuration
+- Added service-worker.js for offline functionality and caching  
+- Registered service worker in src/index.js
+- Updated index.html with PWA meta tags and iOS support
+- Generated app icons (192x192, 512x512, 180x180, favicon)
+- App can now be installed on Android, iOS, and desktop"
+
+git push
+
+═══════════════════════════════════════════════════════════

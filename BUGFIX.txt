@@ -1,0 +1,110 @@
+🔧 BUG FIX - React Image Loading Problem REŠEN!
+
+═══════════════════════════════════════════════════════════
+
+❌ PROBLEM:
+
+Prilikom pokretanja `npm start`, dobijao si grešku:
+
+"Module not found: Error: Can't resolve '/images/gazilar2.png'"
+"Module not found: Error: Can't resolve '/images/ramadan_pozadina.png'"
+
+═══════════════════════════════════════════════════════════
+
+🔍 UZROK:
+
+React CSS loader pokušava da učita slike iz `url()` kao module,
+što ne radi sa slikama u `public` folderu.
+
+Stara verzija (NE RADI):
+CSS: url(/images/slika.png)
+IMG: src="/images/slika.png"
+
+═══════════════════════════════════════════════════════════
+
+✅ REŠENJE - Korišćenje process.env.PUBLIC_URL:
+
+1. SPLASH SCREEN (SplashScreen.jsx):
+   - Dodao inline style za pozadinu
+   - Sve img tagove ažurirao sa process.env.PUBLIC_URL
+
+2. HOME SCREEN (HomeScreen.jsx):
+   - Countdown kartica: inline style sa process.env.PUBLIC_URL
+   - getPrayerIcon: ažuriran da koristi process.env.PUBLIC_URL
+
+3. CSS (App.css):
+   - Uklonjene sve url() direktive za slike
+   - Stilovi ostali isti, ali bez background-image
+
+═══════════════════════════════════════════════════════════
+
+📝 NOVA STRUKTURA:
+
+✅ SplashScreen.jsx:
+```javascript
+<div 
+  style={{
+    backgroundImage: `url(${process.env.PUBLIC_URL}/images/gazilar2.png)`
+  }}
+>
+  <img src={`${process.env.PUBLIC_URL}/images/logoi_beli.png`} />
+</div>
+```
+
+✅ HomeScreen.jsx:
+```javascript
+<div 
+  style={{
+    backgroundImage: `url(${process.env.PUBLIC_URL}/images/ramadan_pozadina.png)`
+  }}
+/>
+
+const getPrayerIcon = (prayer, isActive) => {
+  return `${process.env.PUBLIC_URL}/images/${iconMap[prayer]}`;
+};
+```
+
+═══════════════════════════════════════════════════════════
+
+🚀 TESTIRANJE:
+
+1. Preuzmi NOVI ramadan-app.zip
+2. Raspakiraj
+3. Pokreni:
+
+```bash
+npm install
+npm start
+```
+
+Trebalo bi da se otvori aplikacija bez IJEDNE greške! ✅
+
+═══════════════════════════════════════════════════════════
+
+🎯 ZAŠTO OVO RADI:
+
+process.env.PUBLIC_URL je React varijabla koja automatski:
+- U development mode: pokazuje na localhost:3000
+- U production build: pokazuje na root domen
+- Omogućava pravilan pristup public folderu
+
+Ovo je STANDARDNI način za rad sa slikama u React aplikacijama!
+
+═══════════════════════════════════════════════════════════
+
+📞 AKO I DALJE NE RADI:
+
+1. Obriši node_modules:
+   rm -rf node_modules
+   npm install
+
+2. Očisti cache:
+   npm start -- --reset-cache
+
+3. Proveri da li su slike u public/images/ folderu
+
+═══════════════════════════════════════════════════════════
+
+✅ POTVRĐENO - OVO JE FINALNO REŠENJE!
+
+═══════════════════════════════════════════════════════════

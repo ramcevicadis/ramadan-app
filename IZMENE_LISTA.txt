@@ -1,0 +1,168 @@
+🔄 LISTA IZMENA - 08.02.2026
+
+═══════════════════════════════════════════════════════════
+
+✅ SVE IZMENE IMPLEMENTIRANE:
+
+1. ✅ SPLASH SCREEN - Layout Poboljšanja
+   - Sponzorski logoi pomereni GORE (top: 60px)
+   - "Ramadan Kareem" logo pomeren GORE (margin-top: -80px)
+   - Footer tekst pomeren DOLE (bottom: 30px)
+
+2. ✅ NAVIGACIONE STRELICE - Uklonjene
+   - ◀ ▶ strelice sakrivene (display: none)
+   - SAMO swipe (prevlačenje) funkcioniše
+   - Cleaner UI bez vizuelnog nereda
+
+3. ✅ IKONE NAMAZA - Popravljene
+   - Sabah i Ikindija više nisu razvučene
+   - Dodato: object-fit: contain
+   - Sve ikone zadržavaju aspect ratio
+
+4. ✅ SCROLL PROBLEM - Fiksiran
+   - Uklonjen beli prostor gore/dole
+   - html, body: position: fixed + pozadina
+   - app: overflow: hidden
+   - app-container: overflow-y: auto
+   - overscroll-behavior: none (sprečava bounce)
+
+═══════════════════════════════════════════════════════════
+
+📋 DETALJI IZMENA:
+
+SPLASH SCREEN (src/styles/App.css):
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+BEFORE:
+.splash-sponsors {
+  top: 120px;  ❌
+}
+.splash-logo {
+  margin-bottom: 40px;  ❌
+}
+.splash-footer {
+  bottom: 60px;  ❌
+}
+
+AFTER:
+.splash-sponsors {
+  top: 60px;  ✅ (60px bliže vrhu)
+}
+.splash-logo {
+  margin-top: -80px;  ✅ (pomeren gore)
+}
+.splash-footer {
+  bottom: 30px;  ✅ (30px niže)
+}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+NAVIGACIONE STRELICE:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+BEFORE:
+.nav-arrow {
+  display: flex;  ❌ (strelice vidljive)
+}
+
+AFTER:
+.nav-arrow {
+  display: none;  ✅ (strelice sakrivene)
+}
+
+NAVIGACIJA:
+- Desktop: Nema navigaciju (samo prikaz trenutnog dana)
+- Mobile: Swipe levo/desno (prevlačenje)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SCROLL PROBLEM FIX:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+BEFORE:
+html, body {
+  background: white;  ❌ (belo kada skroluje)
+}
+.app {
+  overflow: auto;  ❌ (dozvoljava scroll)
+}
+
+AFTER:
+html, body {
+  background: linear-gradient(...);  ✅
+  position: fixed;  ✅
+  overscroll-behavior: none;  ✅
+}
+.app {
+  position: fixed;  ✅
+  overflow: hidden;  ✅
+}
+.app-container {
+  overflow-y: auto;  ✅
+  max-height: 100vh;  ✅
+}
+
+KAKO RADI:
+- html/body: Fiksirani, ne skroluju
+- app: Fiksirani, ne skroluje
+- app-container: Jedini element koji skroluje
+- overscroll-behavior: none → Nema bounce efekta (iOS)
+
+═══════════════════════════════════════════════════════════
+
+🚀 KAKO TESTIRATI:
+
+1. Preuzmi ramadan-app.zip
+2. Raspakiraj i zameni stare fajlove
+3. Pokreni:
+   ```bash
+   npm start
+   ```
+
+4. Proveri:
+   ✅ Splash screen - logoi gore, tekst dole
+   ✅ Home screen - nema strelica
+   ✅ Swipe radi (mobile)
+   ✅ Nema belog prostora kad skroluje
+
+═══════════════════════════════════════════════════════════
+
+🔄 GIT UPDATE - Kako Uploadovati:
+
+cd /Users/adisramcevic/Downloads/vaktija/ramadan-app
+
+# 1. Dodaj izmene:
+git add .
+
+# 2. Commit:
+git commit -m "UI improvements: splash layout, removed arrows, fixed scroll"
+
+# 3. Push:
+git push
+
+# 4. Vercel će AUTO-DEPLOY (1-2 min)
+
+═══════════════════════════════════════════════════════════
+
+📝 COMMIT MESSAGE (Copy-Paste):
+
+UI improvements: splash layout, removed arrows, fixed scroll
+
+- Moved splash screen logos higher
+- Moved footer text lower
+- Removed navigation arrows (swipe only)
+- Fixed scroll white space issue
+- Fixed prayer icons aspect ratio
+
+═══════════════════════════════════════════════════════════
+
+✅ REZULTAT:
+
+- Splash screen izgleda BOLJE (balanced layout)
+- Home screen izgleda ČISTIJE (bez strelica)
+- Scroll radi SAVRŠENO (nema belog prostora)
+- Ikone PERFEKTNE (aspect ratio očuvan)
+
+═══════════════════════════════════════════════════════════
+
+Ramadan Kareem! 🌙
