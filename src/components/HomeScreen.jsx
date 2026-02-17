@@ -23,19 +23,68 @@ const HomeScreen = () => {
   ];
   const [selectedCity] = useState(cities[0]);
 
-  // Calculate countdown and next prayer
+  // Calculate countdown and next prayer (ONLY Iftar and Suhur)
   useEffect(() => {
     const updateCountdown = () => {
       const now = new Date();
       
-      // Parse prayer times
-      const prayers = [
-        { name: 'Sabah', time: currentDay.sabah, icon: 'sabah' },
-        { name: 'Podne', time: currentDay.podne, icon: 'podne' },
-        { name: 'Ikindija', time: currentDay.ikindija, icon: 'ikindija' },
-        { name: 'Akšam', time: currentDay.aksam, icon: 'aksam' },
-        { name: 'Jacija', time: currentDay.jacija, icon: 'jacija' }
-      ];
+      const aksam = getAdjustedTime(currentDay.aksam);
+      const [aksHours, aksMin] = aksam.split(':');
+      const akshamTime = new Date(now);
+      akshamTime.setHours(parseInt(aksHours), parseInt(aksMin), 0, 0);
+
+      let targetTime = null;
+      let label = '';
+      let nextPrayerData = null;
+
+      // BEFORE Aksam -> countdown to IFTAR
+      if (now < akshamTime) {
+        targetTime = akshamTime;
+        label = `Iftar u ${aksam.substring(0, 5)}`;
+        nextPrayerData = { name: 'Akšam', time: aksam, icon: 'aksam' };
+      } 
+      // AFTER Aksam -> countdown to SUHUR (next day)
+      else {
+        if (currentDayIndex < prayerTimesData.length - 1) {
+          const nextDayData = prayerTimesData[currentDayIndex + 1];
+          const nextSabah = getAdjustedTime(nextDayData.sabah);
+          const [sabHours, sabMin] = nextSabah.split(':');
+          targetTime = new Date(now);
+          targetTime.setDate(targetTime.getDate() + 1);
+          targetTime.setHours(parseInt(sabHours), parseInt(sabMin), 0, 0);
+          
+          const suhurMin = parseInt(sabMin) - 10;
+          const suhurH = suhurMin < 0 ? parseInt(sabHours) - 1 : parseInt(sabHours);
+          const suhurM = suhurMin < 0 ? 60 + suhurMin : suhurMin;
+          
+          label = `Suhur u ${String(suhurH).padStart(2, '0')}:${String(suhurM).padStart(2, '0')}`;
+          nextPrayerData = { name: 'Sabah', time: nextSabah, icon: 'sabah' };
+        }
+      }
+
+      if (targetTime) {
+        const diff = targetTime - now;
+        const hours = Math.floor(diff / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+        setCountdown(`${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`);
+        if (nextPrayerData) {
+          setNextPrayer({ ...nextPrayerData, label });
+        }
+      }
+    };
+
+    updateCountdown();
+    const interval = setInterval(updateCountdown, 1000);
+    return () => clearInterval(interval);
+  }, [currentDayIndex, currentDay, selectedCity]);
+```
+
+---
+
+### **6. Scroll dole → Commit changes:**
+```
+Countdown only for Iftar and Suhur
 
       // Find next prayer
       let nextPrayerData = null;
