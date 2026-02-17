@@ -18,8 +18,8 @@ const HomeScreen = () => {
 
   const cities = [
     { name: 'Novi Pazar', offset: 0 },
-    { name: 'Beograd', offset: 5 },
-    { name: 'Nis', offset: 3 },
+    { name: 'Beograd', offset: -2 },
+    { name: 'Nis', offset: -5 },
     { name: 'Sarajevo', offset: 9 }
   ];
   const [selectedCity, setSelectedCity] = useState(cities[0]);
