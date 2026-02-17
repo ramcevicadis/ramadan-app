@@ -95,7 +95,7 @@ const HomeScreen = () => {
     updateCountdown();
     var interval = setInterval(updateCountdown, 1000);
     return function() { clearInterval(interval); };
-  }, [currentDayIndex, currentDay, selectedCity]);
+  }, [currentDayIndex, currentDay, selectedCity]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const getActivePrayer = () => {
     var now = new Date();
