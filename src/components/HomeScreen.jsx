@@ -22,52 +22,50 @@ const HomeScreen = () => {
     { name: 'Novi Pazar', offset: 0 }
   ];
   const [selectedCity] = useState(cities[0]);
-
-  // Calculate countdown and next prayer (ONLY Iftar and Suhur)
+// Calculate countdown - ONLY Iftar and Suhur
   useEffect(() => {
     const updateCountdown = () => {
       const now = new Date();
-      
+
       const aksam = getAdjustedTime(currentDay.aksam);
-      const [aksHours, aksMin] = aksam.split(':');
+      const aksParts = aksam.split(':');
       const akshamTime = new Date(now);
-      akshamTime.setHours(parseInt(aksHours), parseInt(aksMin), 0, 0);
+      akshamTime.setHours(parseInt(aksParts[0]), parseInt(aksParts[1]), 0, 0);
 
       let targetTime = null;
       let label = '';
       let nextPrayerData = null;
 
-      // BEFORE Aksam -> countdown to IFTAR
       if (now < akshamTime) {
         targetTime = akshamTime;
-        label = `Iftar u ${aksam.substring(0, 5)}`;
+        label = 'Iftar u ' + aksam.substring(0, 5);
         nextPrayerData = { name: 'Akšam', time: aksam, icon: 'aksam' };
-      } 
-      // AFTER Aksam -> countdown to SUHUR (next day)
-      else {
+      } else {
         if (currentDayIndex < prayerTimesData.length - 1) {
           const nextDayData = prayerTimesData[currentDayIndex + 1];
           const nextSabah = getAdjustedTime(nextDayData.sabah);
-          const [sabHours, sabMin] = nextSabah.split(':');
+          const sabParts = nextSabah.split(':');
+          const sabH = parseInt(sabParts[0]);
+          const sabM = parseInt(sabParts[1]);
+
           targetTime = new Date(now);
           targetTime.setDate(targetTime.getDate() + 1);
-          targetTime.setHours(parseInt(sabHours), parseInt(sabMin), 0, 0);
-          
-          const suhurMin = parseInt(sabMin) - 10;
-          const suhurH = suhurMin < 0 ? parseInt(sabHours) - 1 : parseInt(sabHours);
-          const suhurM = suhurMin < 0 ? 60 + suhurMin : suhurMin;
-          
-          label = `Suhur u ${String(suhurH).padStart(2, '0')}:${String(suhurM).padStart(2, '0')}`;
+          targetTime.setHours(sabH, sabM, 0, 0);
+
+          const suhurM = sabM - 10 < 0 ? 60 + (sabM - 10) : sabM - 10;
+          const suhurH = sabM - 10 < 0 ? sabH - 1 : sabH;
+
+          label = 'Suhur u ' + String(suhurH).padStart(2, '0') + ':' + String(suhurM).padStart(2, '0');
           nextPrayerData = { name: 'Sabah', time: nextSabah, icon: 'sabah' };
         }
       }
 
       if (targetTime) {
         const diff = targetTime - now;
-        const hours = Math.floor(diff / (1000 * 60 * 60));
-        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-        setCountdown(`${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`);
+        const h = Math.floor(diff / (1000 * 60 * 60));
+        const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const s = Math.floor((diff % (1000 * 60)) / 1000);
+        setCountdown(String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0'));
         if (nextPrayerData) {
           setNextPrayer({ ...nextPrayerData, label });
         }
@@ -77,6 +75,14 @@ const HomeScreen = () => {
     updateCountdown();
     const interval = setInterval(updateCountdown, 1000);
     return () => clearInterval(interval);
+  }, [currentDayIndex, currentDay, selectedCity]);
+```
+
+---
+
+### **5. Commit message:**
+```
+Fix syntax error in countdown - Iftar and Suhur only
   }, [currentDayIndex, currentDay, selectedCity]);
 ```
 
