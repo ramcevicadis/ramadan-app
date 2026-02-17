@@ -12,48 +12,68 @@ const HomeScreen = () => {
   const [touchEnd, setTouchEnd] = useState(null);
   const [slideDirection, setSlideDirection] = useState('');
 
-  // Get current day data
   const currentDay = prayerTimesData[currentDayIndex];
   const specialDay = specialDaysData.find(d => d.day === currentDay.day);
   const ayat = ayatData.find(a => a.day === currentDay.day);
 
-  // Cities data (for future expansion)
   const cities = [
-    { name: 'Novi Pazar', offset: 0 }
+    { name: 'Novi Pazar', offset: 0 },
+    { name: 'Beograd', offset: 5 },
+    { name: 'Nis', offset: 3 },
+    { name: 'Sarajevo', offset: -2 }
   ];
-  const [selectedCity] = useState(cities[0]);
-// Calculate countdown - ONLY Iftar and Suhur
-  useEffect(() => {
-    const updateCountdown = () => {
-      const now = new Date();
+  const [selectedCity, setSelectedCity] = useState(cities[0]);
 
-      const aksam = getAdjustedTime(currentDay.aksam);
-      const aksParts = aksam.split(':');
-      const akshamTime = new Date(now);
+  const applyOffset = (timeString, offset) => {
+    if (!timeString || offset === 0) return timeString;
+    var parts = timeString.split(':');
+    var hours = parseInt(parts[0]);
+    var minutes = parseInt(parts[1]);
+    var totalMinutes = hours * 60 + minutes + offset;
+    var newHours = Math.floor(totalMinutes / 60) % 24;
+    var newMinutes = totalMinutes % 60;
+    return String(newHours).padStart(2, '0') + ':' + String(newMinutes).padStart(2, '0') + ':00';
+  };
+
+  const getAdjustedTime = (time) => {
+    return applyOffset(time, selectedCity.offset);
+  };
+
+  useEffect(() => {
+    var updateCountdown = function() {
+      var now = new Date();
+
+      var aksam = getAdjustedTime(currentDay.aksam);
+      var aksParts = aksam.split(':');
+      var akshamTime = new Date(now);
       akshamTime.setHours(parseInt(aksParts[0]), parseInt(aksParts[1]), 0, 0);
 
-      let targetTime = null;
-      let label = '';
-      let nextPrayerData = null;
+      var targetTime = null;
+      var label = '';
+      var nextPrayerData = null;
 
       if (now < akshamTime) {
         targetTime = akshamTime;
         label = 'Iftar u ' + aksam.substring(0, 5);
-        nextPrayerData = { name: 'Akšam', time: aksam, icon: 'aksam' };
+        nextPrayerData = { name: 'Aksam', time: aksam, icon: 'aksam' };
       } else {
         if (currentDayIndex < prayerTimesData.length - 1) {
-          const nextDayData = prayerTimesData[currentDayIndex + 1];
-          const nextSabah = getAdjustedTime(nextDayData.sabah);
-          const sabParts = nextSabah.split(':');
-          const sabH = parseInt(sabParts[0]);
-          const sabM = parseInt(sabParts[1]);
+          var nextDayData = prayerTimesData[currentDayIndex + 1];
+          var nextSabah = getAdjustedTime(nextDayData.sabah);
+          var sabParts = nextSabah.split(':');
+          var sabH = parseInt(sabParts[0]);
+          var sabM = parseInt(sabParts[1]);
 
           targetTime = new Date(now);
           targetTime.setDate(targetTime.getDate() + 1);
           targetTime.setHours(sabH, sabM, 0, 0);
 
-          const suhurM = sabM - 10 < 0 ? 60 + (sabM - 10) : sabM - 10;
-          const suhurH = sabM - 10 < 0 ? sabH - 1 : sabH;
+          var suhurM = sabM - 10;
+          var suhurH = sabH;
+          if (suhurM < 0) {
+            suhurM = 60 + suhurM;
+            suhurH = sabH - 1;
+          }
 
           label = 'Suhur u ' + String(suhurH).padStart(2, '0') + ':' + String(suhurM).padStart(2, '0');
           nextPrayerData = { name: 'Sabah', time: nextSabah, icon: 'sabah' };
@@ -61,118 +81,38 @@ const HomeScreen = () => {
       }
 
       if (targetTime) {
-        const diff = targetTime - now;
-        const h = Math.floor(diff / (1000 * 60 * 60));
-        const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        const s = Math.floor((diff % (1000 * 60)) / 1000);
+        var diff = targetTime - now;
+        var h = Math.floor(diff / (1000 * 60 * 60));
+        var m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        var s = Math.floor((diff % (1000 * 60)) / 1000);
         setCountdown(String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0'));
         if (nextPrayerData) {
-          setNextPrayer({ ...nextPrayerData, label });
+          setNextPrayer({ ...nextPrayerData, label: label });
         }
       }
     };
 
     updateCountdown();
-    const interval = setInterval(updateCountdown, 1000);
-    return () => clearInterval(interval);
+    var interval = setInterval(updateCountdown, 1000);
+    return function() { clearInterval(interval); };
   }, [currentDayIndex, currentDay, selectedCity]);
-```
 
----
-
-### **5. Commit message:**
-```
-Fix syntax error in countdown - Iftar and Suhur only
-  }, [currentDayIndex, currentDay, selectedCity]);
-```
-
----
-
-### **6. Scroll dole → Commit changes:**
-```
-Countdown only for Iftar and Suhur
-
-      // Find next prayer
-      let nextPrayerData = null;
-      let targetTime = null;
-
-      for (const prayer of prayers) {
-        const [hours, minutes] = prayer.time.split(':');
-        const prayerTime = new Date(now);
-        prayerTime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
-
-        if (prayerTime > now) {
-          nextPrayerData = prayer;
-          targetTime = prayerTime;
-          break;
-        }
-      }
-
-      // If no prayer found today, use first prayer of next day
-      if (!nextPrayerData && currentDayIndex < prayerTimesData.length - 1) {
-        const nextDayData = prayerTimesData[currentDayIndex + 1];
-        const [hours, minutes] = nextDayData.sabah.split(':');
-        targetTime = new Date(now);
-        targetTime.setDate(targetTime.getDate() + 1);
-        targetTime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
-        nextPrayerData = { name: 'Sabah', time: nextDayData.sabah, icon: 'sabah' };
-      }
-
-      if (targetTime) {
-        const diff = targetTime - now;
-        const hours = Math.floor(diff / (1000 * 60 * 60));
-        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-        setCountdown(`${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`);
-        
-        if (nextPrayerData) {
-          // Determine if it's Iftar (Akšam) or Suhur (before Sabah)
-          let label = '';
-          if (nextPrayerData.name === 'Akšam') {
-            label = `Iftar u ${nextPrayerData.time.substring(0, 5)}`;
-          } else if (nextPrayerData.name === 'Sabah') {
-            // Suhur is ~10 minutes before Sabah
-            const [h, m] = nextPrayerData.time.split(':');
-            const suhurMinutes = parseInt(m) - 10;
-            label = `Suhur u ${h}:${String(suhurMinutes).padStart(2, '0')}`;
-          } else {
-            label = `${nextPrayerData.name} u ${nextPrayerData.time.substring(0, 5)}`;
-          }
-          
-          setNextPrayer({
-            ...nextPrayerData,
-            label
-          });
-        }
-      }
-    };
-
-    updateCountdown();
-    const interval = setInterval(updateCountdown, 1000);
-    return () => clearInterval(interval);
-  }, [currentDayIndex, currentDay]);
-
-  // Get active prayer
   const getActivePrayer = () => {
-    const now = new Date();
-    const prayers = ['sabah', 'podne', 'ikindija', 'aksam', 'jacija'];
-    
-    for (let i = 0; i < prayers.length; i++) {
-      const [hours, minutes] = currentDay[prayers[i]].split(':');
-      const prayerTime = new Date(now);
-      prayerTime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
-
+    var now = new Date();
+    var prayers = ['sabah', 'podne', 'ikindija', 'aksam', 'jacija'];
+    for (var i = 0; i < prayers.length; i++) {
+      var parts = currentDay[prayers[i]].split(':');
+      var prayerTime = new Date(now);
+      prayerTime.setHours(parseInt(parts[0]), parseInt(parts[1]), 0, 0);
       if (prayerTime > now) {
         return i > 0 ? prayers[i - 1] : null;
       }
     }
-    return 'jacija'; // After last prayer
+    return 'jacija';
   };
 
   const activePrayer = getActivePrayer();
 
-  // Navigation handlers
   const goToPreviousDay = () => {
     if (currentDayIndex > 0) {
       setSlideDirection('slide-right');
@@ -193,7 +133,6 @@ Countdown only for Iftar and Suhur
     }
   };
 
-  // Touch handlers for swipe
   const minSwipeDistance = 50;
 
   const onTouchStart = (e) => {
@@ -207,126 +146,102 @@ Countdown only for Iftar and Suhur
 
   const onTouchEnd = () => {
     if (!touchStart || !touchEnd) return;
-    
-    const distance = touchStart - touchEnd;
-    const isLeftSwipe = distance > minSwipeDistance;
-    const isRightSwipe = distance < -minSwipeDistance;
-
-    if (isLeftSwipe) {
+    var distance = touchStart - touchEnd;
+    if (distance > minSwipeDistance) {
       goToNextDay();
-    } else if (isRightSwipe) {
+    } else if (distance < -minSwipeDistance) {
       goToPreviousDay();
     }
   };
 
-  // Prayer icons map
   const getPrayerIcon = (prayer, isActive) => {
-    const iconMap = {
+    var iconMap = {
       sabah: isActive ? 'sabah_on.png' : 'sabah_of.png',
       podne: isActive ? 'podne_on.png' : 'podne_off.png',
       ikindija: isActive ? 'ikindija_on.png' : 'ikindija_off.png',
       aksam: isActive ? 'aksam_onn.png' : 'aksam_offf.png',
       jacija: isActive ? 'jacija_on.png' : 'jacija_off.png'
     };
-    return `${process.env.PUBLIC_URL}/images/${iconMap[prayer]}`;
+    return process.env.PUBLIC_URL + '/images/' + iconMap[prayer];
   };
 
   const prayerNames = {
     sabah: 'Sabah',
     podne: 'Podne',
     ikindija: 'Ikindija',
-    aksam: 'Akšam',
+    aksam: 'Aksam',
     jacija: 'Jacija'
   };
 
   return (
-    <div 
-      className={`home-screen swipeable ${slideDirection}`}
+    <div
+      className={'home-screen swipeable ' + slideDirection}
       onTouchStart={onTouchStart}
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
     >
-      {/* Header */}
       <div className="home-header">
         <div className="city-selector">
           <span>▼</span>
-          <select value={selectedCity.name}>
+          <select
+            value={selectedCity.name}
+            onChange={(e) => {
+              var city = cities.find(function(c) { return c.name === e.target.value; });
+              if (city) setSelectedCity(city);
+            }}
+          >
             {cities.map(city => (
               <option key={city.name} value={city.name}>{city.name}</option>
             ))}
           </select>
         </div>
-        
         <button className="info-button" onClick={() => setShowInfoModal(true)}>
           ℹ️
         </button>
       </div>
 
-      {/* Main Countdown Card */}
-      <div 
+      <div
         className="countdown-card"
-        style={{
-          backgroundImage: `url(${process.env.PUBLIC_URL}/images/ramadan_pozadina.png)`
-        }}
+        style={{ backgroundImage: 'url(' + process.env.PUBLIC_URL + '/images/ramadan_pozadina.png)' }}
       >
         <div className="countdown-timer">{countdown}</div>
         <div className="countdown-label">
-          {nextPrayer ? nextPrayer.label : 'Učitavanje...'}
+          {nextPrayer ? nextPrayer.label : 'Ucitavanje...'}
         </div>
       </div>
 
-      {/* Date Navigation */}
       <div className="date-navigation">
-        <button 
-          className="nav-arrow" 
-          onClick={goToPreviousDay}
-          disabled={currentDayIndex === 0}
-        >
+        <button className="nav-arrow" onClick={goToPreviousDay} disabled={currentDayIndex === 0}>
           ◀
         </button>
-        
         <div className="date-info">
-          <div className="current-date">
-            {currentDay.dayName}
-          </div>
+          <div className="current-date">{currentDay.dayName}</div>
           <div className="ramadan-progress">
             <span className="progress-text">{currentDay.day} / 30</span>
             <div className="progress-bar">
-              <div 
-                className="progress-fill" 
-                style={{ width: `${(currentDay.day / 30) * 100}%` }}
-              />
+              <div className="progress-fill" style={{ width: (currentDay.day / 30 * 100) + '%' }} />
             </div>
           </div>
-          <div className="full-date">
-            Novi Pazar {currentDay.date}
-          </div>
+          <div className="full-date">Novi Pazar {currentDay.date}</div>
         </div>
-        
-        <button 
-          className="nav-arrow" 
-          onClick={goToNextDay}
-          disabled={currentDayIndex === prayerTimesData.length - 1}
-        >
+        <button className="nav-arrow" onClick={goToNextDay} disabled={currentDayIndex === prayerTimesData.length - 1}>
           ▶
         </button>
       </div>
 
-      {/* Special Day Banner */}
       {specialDay && (
         <div className="special-day-banner">
           🌙 {specialDay.event}
         </div>
       )}
 
-      {/* Next Prayer Card */}
       {nextPrayer && (
         <div className="next-prayer-card">
           <div className="prayer-icon-large">
             <img src={getPrayerIcon(nextPrayer.icon, true)} alt={nextPrayer.name} />
           </div>
           <div className="prayer-info">
-            <div className="prayer-label">Sljedeći Namaz</div>
+            <div className="prayer-label">Sljedeci Namaz</div>
             <div className="prayer-name-time">
               {nextPrayer.name} <span className="prayer-time-large">{nextPrayer.time.substring(0, 5)}</span>
             </div>
@@ -334,26 +249,18 @@ Countdown only for Iftar and Suhur
         </div>
       )}
 
-      {/* Prayer Times List */}
       <div className="prayer-times-list">
         {['sabah', 'podne', 'ikindija', 'aksam', 'jacija'].map(prayer => (
-          <div 
-            key={prayer} 
-            className={`prayer-item ${activePrayer === prayer ? 'active' : ''}`}
-          >
+          <div key={prayer} className={'prayer-item ' + (activePrayer === prayer ? 'active' : '')}>
             <div className="prayer-icon">
-              <img 
-                src={getPrayerIcon(prayer, activePrayer === prayer)} 
-                alt={prayerNames[prayer]} 
-              />
+              <img src={getPrayerIcon(prayer, activePrayer === prayer)} alt={prayerNames[prayer]} />
             </div>
             <div className="prayer-name">{prayerNames[prayer]}</div>
-            <div className="prayer-time">{currentDay[prayer].substring(0, 5)}</div>
+            <div className="prayer-time">{getAdjustedTime(currentDay[prayer]).substring(0, 5)}</div>
           </div>
         ))}
       </div>
 
-      {/* Ayat of the Day */}
       {ayat && (
         <div className="ayat-card">
           <div className="ayat-label">Ajet Dana</div>
@@ -362,15 +269,12 @@ Countdown only for Iftar and Suhur
         </div>
       )}
 
-      {/* Info Modal */}
       {showInfoModal && (
         <div className="modal-overlay" onClick={() => setShowInfoModal(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              ℹ️ Informacija
-            </div>
+            <div className="modal-header">ℹ️ Informacija</div>
             <div className="modal-body">
-              Bajram namaz će se klanjati u petak 20. Marta 06:21h
+              Bajram namaz ce se klanjati u petak 20. Marta 06:21h
             </div>
             <button className="modal-close" onClick={() => setShowInfoModal(false)}>
               Zatvori
