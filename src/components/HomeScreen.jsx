@@ -6,6 +6,7 @@ import ayatData from '../data/ayat.json';
 const HomeScreen = () => {
   const [currentDayIndex, setCurrentDayIndex] = useState(0);
   const [countdown, setCountdown] = useState('');
+  const [countdownLabel, setCountdownLabel] = useState('Ucitavanje...');
   const [nextPrayer, setNextPrayer] = useState(null);
   const [showInfoModal, setShowInfoModal] = useState(false);
   const [touchStart, setTouchStart] = useState(null);
@@ -90,13 +91,14 @@ const HomeScreen = () => {
         const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
         const s = Math.floor((diff % (1000 * 60)) / 1000);
         setCountdown(String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0'));
+        setCountdownLabel(label);
       }
     };
 
     updateCountdown();
     const interval = setInterval(updateCountdown, 1000);
     return () => clearInterval(interval);
-  }, [currentDayIndex, currentDay, selectedCity]);
+  }, [currentDayIndex, currentDay, selectedCity]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     const updateNextPrayer = () => {
@@ -135,7 +137,7 @@ const HomeScreen = () => {
     updateNextPrayer();
     const interval = setInterval(updateNextPrayer, 60000);
     return () => clearInterval(interval);
-  }, [currentDayIndex, currentDay, selectedCity]);
+  }, [currentDayIndex, currentDay, selectedCity]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const getActivePrayer = () => {
     const now = new Date();
@@ -240,7 +242,7 @@ const HomeScreen = () => {
         style={{ backgroundImage: 'url(' + process.env.PUBLIC_URL + '/images/ramadan_pozadina.png)' }}
       >
         <div className="countdown-timer">{countdown}</div>
-        <div className="countdown-label">Ucitavanje...</div>
+        <div className="countdown-label">{countdownLabel}</div>
       </div>
 
       <div className="date-navigation">
