@@ -39,23 +39,20 @@ const HomeScreen = () => {
     return applyOffset(time, selectedCity.offset);
   };
 
+  // Countdown timer - ONLY Iftar and Suhur
   useEffect(() => {
     var updateCountdown = function() {
       var now = new Date();
-
       var aksam = getAdjustedTime(currentDay.aksam);
       var aksParts = aksam.split(':');
       var akshamTime = new Date(now);
       akshamTime.setHours(parseInt(aksParts[0]), parseInt(aksParts[1]), 0, 0);
-
       var targetTime = null;
       var label = '';
-      var nextPrayerData = null;
 
       if (now < akshamTime) {
         targetTime = akshamTime;
         label = 'Iftar u ' + aksam.substring(0, 5);
-        nextPrayerData = { name: 'Aksam', time: aksam, icon: 'aksam' };
       } else {
         if (currentDayIndex < prayerTimesData.length - 1) {
           var nextDayData = prayerTimesData[currentDayIndex + 1];
@@ -63,20 +60,16 @@ const HomeScreen = () => {
           var sabParts = nextSabah.split(':');
           var sabH = parseInt(sabParts[0]);
           var sabM = parseInt(sabParts[1]);
-
           targetTime = new Date(now);
           targetTime.setDate(targetTime.getDate() + 1);
           targetTime.setHours(sabH, sabM, 0, 0);
-
           var suhurM = sabM - 10;
           var suhurH = sabH;
           if (suhurM < 0) {
             suhurM = 60 + suhurM;
             suhurH = sabH - 1;
           }
-
           label = 'Suhur u ' + String(suhurH).padStart(2, '0') + ':' + String(suhurM).padStart(2, '0');
-          nextPrayerData = { name: 'Sabah', time: nextSabah, icon: 'sabah' };
         }
       }
 
@@ -86,9 +79,6 @@ const HomeScreen = () => {
         var m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
         var s = Math.floor((diff % (1000 * 60)) / 1000);
         setCountdown(String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0'));
-        if (nextPrayerData) {
-          setNextPrayer({ ...nextPrayerData, label: label });
-        }
       }
     };
 
@@ -96,6 +86,80 @@ const HomeScreen = () => {
     var interval = setInterval(updateCountdown, 1000);
     return function() { clearInterval(interval); };
   }, [currentDayIndex, currentDay, selectedCity]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Next prayer card - ALL PRAYERS in order
+  useEffect(() => {
+    var updateNextPrayer = function() {
+      var now = new Date();
+      var prayers = ['sabah', 'podne', 'ikindija', 'aksam', 'jacija'];
+      
+      for (var i = 0; i < prayers.length; i++) {
+        var prayerTime = getAdjustedTime(currentDay[prayers[i]]);
+        var parts = prayerTime.split(':');
+        var pTime = new Date(now);
+        pTime.setHours(parseInt(parts[0]), parseInt(parts[1]), 0, 0);
+        
+        if (pTime > now) {
+          setNextPrayer({
+            name: prayerNames[prayers[i]],
+            time: prayerTime,
+            icon: prayers[i],
+            label: prayerNames[prayers[i]] + ' u ' + prayerTime.substring(0, 5)
+          });
+          return;
+        }
+      }
+      
+      // All prayers passed - show tomorrow Sabah
+      if (currentDayIndex < prayerTimesData.length - 1) {
+        var nextDayData = prayerTimesData[currentDayIndex + 1];
+        var nextSabah = getAdjustedTime(nextDayData.sabah);
+        setNextPrayer({
+          name: prayerNames.sabah,
+          time: nextSabah,
+          icon: 'sabah',
+          label: prayerNames.sabah + ' u ' + nextSabah.substring(0, 5)
+        });
+      }
+    };
+
+    updateNextPrayer();
+    var interval = setInterval(updateNextPrayer, 60000);
+    return function() { clearInterval(interval); };
+  }, [currentDayIndex, currentDay, selectedCity]); // eslint-disable-line react-hooks/exhaustive-deps
+```
+
+---
+
+## **ŠTA RADI:**
+
+**Sada imaš DVA odvojena useEffect-a:**
+
+1. **Prvi** - Countdown (veliki sat):
+   - Samo Iftar i Suhur ✅
+
+2. **Drugi** - "Sledeći Namaz" kartica:
+   - Sabah, Podne, Ikindija, Akšam, Jacija - SVE po redu! ✅
+
+---
+
+## **Primer:**
+
+| Vreme | Countdown | Sledeći Namaz |
+|-------|-----------|--------------|
+| 04:00 | Suhur u 04:46 | Sabah u 04:56 |
+| 06:00 | Iftar u 17:09 | Podne u 11:53 |
+| 13:00 | Iftar u 17:09 | Ikindija u 14:22 |
+| 15:00 | Iftar u 17:09 | Akšam u 17:09 |
+| 18:00 | Suhur u 04:46 | Jacija u 18:15 |
+| 19:00 | Suhur u 04:46 | Sabah u 04:56 (sutra) |
+
+---
+
+**Commit message:**
+```
+Separate countdown timer from next prayer card logic
+     
 
   const getActivePrayer = () => {
     var now = new Date();
