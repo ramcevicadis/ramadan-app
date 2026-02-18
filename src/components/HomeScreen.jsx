@@ -24,21 +24,6 @@ const HomeScreen = () => {
   ];
   const [selectedCity, setSelectedCity] = useState(cities[0]);
 
-  const applyOffset = (timeString, offset) => {
-    if (!timeString || offset === 0) return timeString;
-    var parts = timeString.split(':');
-    var hours = parseInt(parts[0]);
-    var minutes = parseInt(parts[1]);
-    var totalMinutes = hours * 60 + minutes + offset;
-    var newHours = Math.floor(totalMinutes / 60) % 24;
-    var newMinutes = totalMinutes % 60;
-    return String(newHours).padStart(2, '0') + ':' + String(newMinutes).padStart(2, '0') + ':00';
-  };
-
-  const getAdjustedTime = (time) => {
-    return applyOffset(time, selectedCity.offset);
-  };
-
   const prayerNames = {
     sabah: 'Sabah',
     podne: 'Podne',
@@ -47,64 +32,81 @@ const HomeScreen = () => {
     jacija: 'Jacija'
   };
 
-  // Countdown timer - ONLY Iftar and Suhur
+  const applyOffset = (timeString, offset) => {
+    if (!timeString || offset === 0) return timeString;
+    const parts = timeString.split(':');
+    const hours = parseInt(parts[0]);
+    const minutes = parseInt(parts[1]);
+    const totalMinutes = hours * 60 + minutes + offset;
+    const newHours = Math.floor(totalMinutes / 60) % 24;
+    const newMinutes = totalMinutes % 60;
+    return String(newHours).padStart(2, '0') + ':' + String(newMinutes).padStart(2, '0') + ':00';
+  };
+
+  const getAdjustedTime = (time) => {
+    return applyOffset(time, selectedCity.offset);
+  };
+
   useEffect(() => {
-    var updateCountdown = function() {
-      var now = new Date();
-      var aksam = getAdjustedTime(currentDay.aksam);
-      var aksParts = aksam.split(':');
-      var akshamTime = new Date(now);
+    const updateCountdown = () => {
+      const now = new Date();
+      const aksam = getAdjustedTime(currentDay.aksam);
+      const aksParts = aksam.split(':');
+      const akshamTime = new Date(now);
       akshamTime.setHours(parseInt(aksParts[0]), parseInt(aksParts[1]), 0, 0);
-      var targetTime = null;
-      var label = '';
+      
+      let targetTime = null;
+      let label = '';
 
       if (now < akshamTime) {
         targetTime = akshamTime;
         label = 'Iftar u ' + aksam.substring(0, 5);
       } else {
         if (currentDayIndex < prayerTimesData.length - 1) {
-          var nextDayData = prayerTimesData[currentDayIndex + 1];
-          var nextSabah = getAdjustedTime(nextDayData.sabah);
-          var sabParts = nextSabah.split(':');
-          var sabH = parseInt(sabParts[0]);
-          var sabM = parseInt(sabParts[1]);
+          const nextDayData = prayerTimesData[currentDayIndex + 1];
+          const nextSabah = getAdjustedTime(nextDayData.sabah);
+          const sabParts = nextSabah.split(':');
+          const sabH = parseInt(sabParts[0]);
+          const sabM = parseInt(sabParts[1]);
+          
           targetTime = new Date(now);
           targetTime.setDate(targetTime.getDate() + 1);
           targetTime.setHours(sabH, sabM, 0, 0);
-          var suhurM = sabM - 10;
-          var suhurH = sabH;
+          
+          let suhurM = sabM - 10;
+          let suhurH = sabH;
           if (suhurM < 0) {
             suhurM = 60 + suhurM;
             suhurH = sabH - 1;
           }
+          
           label = 'Suhur u ' + String(suhurH).padStart(2, '0') + ':' + String(suhurM).padStart(2, '0');
         }
       }
 
       if (targetTime) {
-        var diff = targetTime - now;
-        var h = Math.floor(diff / (1000 * 60 * 60));
-        var m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        var s = Math.floor((diff % (1000 * 60)) / 1000);
+        const diff = targetTime - now;
+        const h = Math.floor(diff / (1000 * 60 * 60));
+        const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const s = Math.floor((diff % (1000 * 60)) / 1000);
         setCountdown(String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0'));
       }
     };
 
     updateCountdown();
-    var interval = setInterval(updateCountdown, 1000);
-    return function() { clearInterval(interval); };
+    const interval = setInterval(updateCountdown, 1000);
+    return () => clearInterval(interval);
   }, [currentDayIndex, currentDay, selectedCity]);
 
-  // Next prayer card - ALL PRAYERS in order
   useEffect(() => {
-    var updateNextPrayer = function() {
-      var now = new Date();
-      var prayers = ['sabah', 'podne', 'ikindija', 'aksam', 'jacija'];
+    const updateNextPrayer = () => {
+      const now = new Date();
+      const prayers = ['sabah', 'podne', 'ikindija', 'aksam', 'jacija'];
       
-      for (var i = 0; i < prayers.length; i++) {
-        var prayerTime = getAdjustedTime(currentDay[prayers[i]]);
-        var parts = prayerTime.split(':');
-        var pTime = new Date(now);
+      for (let i = 0; i < prayers.length; i++) {
+        const prayerTime = getAdjustedTime(currentDay[prayers[i]]);
+        const parts = prayerTime.split(':');
+        const pTime = new Date(now);
         pTime.setHours(parseInt(parts[0]), parseInt(parts[1]), 0, 0);
         
         if (pTime > now) {
@@ -118,10 +120,9 @@ const HomeScreen = () => {
         }
       }
       
-      // All prayers passed - show tomorrow Sabah
       if (currentDayIndex < prayerTimesData.length - 1) {
-        var nextDayData = prayerTimesData[currentDayIndex + 1];
-        var nextSabah = getAdjustedTime(nextDayData.sabah);
+        const nextDayData = prayerTimesData[currentDayIndex + 1];
+        const nextSabah = getAdjustedTime(nextDayData.sabah);
         setNextPrayer({
           name: prayerNames.sabah,
           time: nextSabah,
@@ -132,17 +133,19 @@ const HomeScreen = () => {
     };
 
     updateNextPrayer();
-    var interval = setInterval(updateNextPrayer, 60000);
-    return function() { clearInterval(interval); };
+    const interval = setInterval(updateNextPrayer, 60000);
+    return () => clearInterval(interval);
   }, [currentDayIndex, currentDay, selectedCity]);
 
   const getActivePrayer = () => {
-    var now = new Date();
-    var prayers = ['sabah', 'podne', 'ikindija', 'aksam', 'jacija'];
-    for (var i = 0; i < prayers.length; i++) {
-      var parts = currentDay[prayers[i]].split(':');
-      var prayerTime = new Date(now);
+    const now = new Date();
+    const prayers = ['sabah', 'podne', 'ikindija', 'aksam', 'jacija'];
+    
+    for (let i = 0; i < prayers.length; i++) {
+      const parts = currentDay[prayers[i]].split(':');
+      const prayerTime = new Date(now);
       prayerTime.setHours(parseInt(parts[0]), parseInt(parts[1]), 0, 0);
+      
       if (prayerTime > now) {
         return i > 0 ? prayers[i - 1] : null;
       }
@@ -185,7 +188,8 @@ const HomeScreen = () => {
 
   const onTouchEnd = () => {
     if (!touchStart || !touchEnd) return;
-    var distance = touchStart - touchEnd;
+    const distance = touchStart - touchEnd;
+    
     if (distance > minSwipeDistance) {
       goToNextDay();
     } else if (distance < -minSwipeDistance) {
@@ -194,7 +198,7 @@ const HomeScreen = () => {
   };
 
   const getPrayerIcon = (prayer, isActive) => {
-    var iconMap = {
+    const iconMap = {
       sabah: isActive ? 'sabah_on.png' : 'sabah_of.png',
       podne: isActive ? 'podne_on.png' : 'podne_off.png',
       ikindija: isActive ? 'ikindija_on.png' : 'ikindija_off.png',
@@ -217,7 +221,7 @@ const HomeScreen = () => {
           <select
             value={selectedCity.name}
             onChange={(e) => {
-              var city = cities.find(function(c) { return c.name === e.target.value; });
+              const city = cities.find(c => c.name === e.target.value);
               if (city) setSelectedCity(city);
             }}
           >
@@ -236,9 +240,7 @@ const HomeScreen = () => {
         style={{ backgroundImage: 'url(' + process.env.PUBLIC_URL + '/images/ramadan_pozadina.png)' }}
       >
         <div className="countdown-timer">{countdown}</div>
-        <div className="countdown-label">
-          {nextPrayer ? nextPrayer.label : 'Ucitavanje...'}
-        </div>
+        <div className="countdown-label">Ucitavanje...</div>
       </div>
 
       <div className="date-navigation">
@@ -318,10 +320,3 @@ const HomeScreen = () => {
 };
 
 export default HomeScreen;
-```
-
----
-
-## **Commit message:**
-```
-Fix syntax error - complete HomeScreen with separate countdown/next prayer
