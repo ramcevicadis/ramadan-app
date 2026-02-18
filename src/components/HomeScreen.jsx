@@ -39,6 +39,14 @@ const HomeScreen = () => {
     return applyOffset(time, selectedCity.offset);
   };
 
+  const prayerNames = {
+    sabah: 'Sabah',
+    podne: 'Podne',
+    ikindija: 'Ikindija',
+    aksam: 'Aksam',
+    jacija: 'Jacija'
+  };
+
   // Countdown timer - ONLY Iftar and Suhur
   useEffect(() => {
     var updateCountdown = function() {
@@ -85,7 +93,7 @@ const HomeScreen = () => {
     updateCountdown();
     var interval = setInterval(updateCountdown, 1000);
     return function() { clearInterval(interval); };
-  }, [currentDayIndex, currentDay, selectedCity]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [currentDayIndex, currentDay, selectedCity]);
 
   // Next prayer card - ALL PRAYERS in order
   useEffect(() => {
@@ -126,40 +134,7 @@ const HomeScreen = () => {
     updateNextPrayer();
     var interval = setInterval(updateNextPrayer, 60000);
     return function() { clearInterval(interval); };
-  }, [currentDayIndex, currentDay, selectedCity]); // eslint-disable-line react-hooks/exhaustive-deps
-```
-
----
-
-## **ŠTA RADI:**
-
-**Sada imaš DVA odvojena useEffect-a:**
-
-1. **Prvi** - Countdown (veliki sat):
-   - Samo Iftar i Suhur ✅
-
-2. **Drugi** - "Sledeći Namaz" kartica:
-   - Sabah, Podne, Ikindija, Akšam, Jacija - SVE po redu! ✅
-
----
-
-## **Primer:**
-
-| Vreme | Countdown | Sledeći Namaz |
-|-------|-----------|--------------|
-| 04:00 | Suhur u 04:46 | Sabah u 04:56 |
-| 06:00 | Iftar u 17:09 | Podne u 11:53 |
-| 13:00 | Iftar u 17:09 | Ikindija u 14:22 |
-| 15:00 | Iftar u 17:09 | Akšam u 17:09 |
-| 18:00 | Suhur u 04:46 | Jacija u 18:15 |
-| 19:00 | Suhur u 04:46 | Sabah u 04:56 (sutra) |
-
----
-
-**Commit message:**
-```
-Separate countdown timer from next prayer card logic
-     
+  }, [currentDayIndex, currentDay, selectedCity]);
 
   const getActivePrayer = () => {
     var now = new Date();
@@ -227,14 +202,6 @@ Separate countdown timer from next prayer card logic
       jacija: isActive ? 'jacija_on.png' : 'jacija_off.png'
     };
     return process.env.PUBLIC_URL + '/images/' + iconMap[prayer];
-  };
-
-  const prayerNames = {
-    sabah: 'Sabah',
-    podne: 'Podne',
-    ikindija: 'Ikindija',
-    aksam: 'Aksam',
-    jacija: 'Jacija'
   };
 
   return (
@@ -351,3 +318,10 @@ Separate countdown timer from next prayer card logic
 };
 
 export default HomeScreen;
+```
+
+---
+
+## **Commit message:**
+```
+Fix syntax error - complete HomeScreen with separate countdown/next prayer
