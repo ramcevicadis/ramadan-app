@@ -25,6 +25,36 @@ const HomeScreen = () => {
   ];
   const [selectedCity, setSelectedCity] = useState(cities[0]);
 
+  // Auto-detect current Ramadan day on mount
+  useEffect(() => {
+    const today = new Date();
+    const todayStr = String(today.getDate()).padStart(2, '0') + '.' + String(today.getMonth() + 1).padStart(2, '0') + '.' + today.getFullYear();
+    
+    const foundDayIndex = prayerTimesData.findIndex(day => day.date === todayStr);
+    
+    if (foundDayIndex !== -1) {
+      setCurrentDayIndex(foundDayIndex);
+    }
+  }, []);
+
+  // Auto-advance to next day at midnight
+  useEffect(() => {
+    const checkMidnight = () => {
+      const now = new Date();
+      const todayStr = String(now.getDate()).padStart(2, '0') + '.' + String(now.getMonth() + 1).padStart(2, '0') + '.' + now.getFullYear();
+      
+      if (currentDay.date !== todayStr) {
+        const foundDayIndex = prayerTimesData.findIndex(day => day.date === todayStr);
+        if (foundDayIndex !== -1 && foundDayIndex !== currentDayIndex) {
+          setCurrentDayIndex(foundDayIndex);
+        }
+      }
+    };
+
+    const interval = setInterval(checkMidnight, 60000);
+    return () => clearInterval(interval);
+  }, [currentDayIndex, currentDay]);
+
   const prayerNames = {
     sabah: 'Sabah',
     podne: 'Podne',
@@ -51,6 +81,20 @@ const HomeScreen = () => {
   useEffect(() => {
     const updateCountdown = () => {
       const now = new Date();
+      
+      // Get today's Sabah for Suhur calculation
+      const todaySabah = getAdjustedTime(currentDay.sabah);
+      const sabahParts = todaySabah.split(':');
+      let todaySuhurM = parseInt(sabahParts[1]) - 10;
+      let todaySuhurH = parseInt(sabahParts[0]);
+      if (todaySuhurM < 0) {
+        todaySuhurM = 60 + todaySuhurM;
+        todaySuhurH = todaySuhurH - 1;
+      }
+      const todaySuhurTime = new Date(now);
+      todaySuhurTime.setHours(todaySuhurH, todaySuhurM, 0, 0);
+      
+      // Get today's Aksam (Iftar)
       const aksam = getAdjustedTime(currentDay.aksam);
       const aksParts = aksam.split(':');
       const akshamTime = new Date(now);
@@ -59,29 +103,35 @@ const HomeScreen = () => {
       let targetTime = null;
       let label = '';
 
-      if (now < akshamTime) {
+      // BEFORE today's Suhur (00:00 - 04:46)
+      if (now < todaySuhurTime) {
+        targetTime = todaySuhurTime;
+        label = 'Suhur u ' + String(todaySuhurH).padStart(2, '0') + ':' + String(todaySuhurM).padStart(2, '0');
+      }
+      // BETWEEN Suhur and Iftar (04:46 - 17:09)
+      else if (now < akshamTime) {
         targetTime = akshamTime;
         label = 'Iftar u ' + aksam.substring(0, 5);
-      } else {
+      }
+      // AFTER Iftar (17:09 - 23:59) - show TOMORROW's Suhur
+      else {
         if (currentDayIndex < prayerTimesData.length - 1) {
           const nextDayData = prayerTimesData[currentDayIndex + 1];
           const nextSabah = getAdjustedTime(nextDayData.sabah);
-          const sabParts = nextSabah.split(':');
-          const sabH = parseInt(sabParts[0]);
-          const sabM = parseInt(sabParts[1]);
+          const nextSabahParts = nextSabah.split(':');
+          
+          let nextSuhurM = parseInt(nextSabahParts[1]) - 10;
+          let nextSuhurH = parseInt(nextSabahParts[0]);
+          if (nextSuhurM < 0) {
+            nextSuhurM = 60 + nextSuhurM;
+            nextSuhurH = nextSuhurH - 1;
+          }
           
           targetTime = new Date(now);
           targetTime.setDate(targetTime.getDate() + 1);
-          targetTime.setHours(sabH, sabM, 0, 0);
+          targetTime.setHours(nextSuhurH, nextSuhurM, 0, 0);
           
-          let suhurM = sabM - 10;
-          let suhurH = sabH;
-          if (suhurM < 0) {
-            suhurM = 60 + suhurM;
-            suhurH = sabH - 1;
-          }
-          
-          label = 'Suhur u ' + String(suhurH).padStart(2, '0') + ':' + String(suhurM).padStart(2, '0');
+          label = 'Suhur u ' + String(nextSuhurH).padStart(2, '0') + ':' + String(nextSuhurM).padStart(2, '0');
         }
       }
 
